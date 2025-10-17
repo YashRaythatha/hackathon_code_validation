@@ -1,0 +1,17 @@
+{
+  "readme_text": "# AI-Powered Dashboard\n\n## Features\n- Real-time data visualization\n- Machine learning predictions\n- Responsive design\n- Accessibility compliant\n\n## Tech Stack\n- Frontend: React + TypeScript\n- Backend: Python + FastAPI\n- Database: PostgreSQL\n- Deployment: Docker + AWS\n\n## Setup\n1. Clone the repository\n2. Run `docker-compose up`\n3. Visit http://localhost:3000\n\n## Architecture\nThis project follows a microservices architecture with clear separation between frontend and backend services.\n\n## Testing\nRun tests with: `npm test` and `pytest`\n\n## License\nMIT License",
+  "test_results": "=============================== test session starts ================================\ntest_api.py::test_get_data PASSED\ntest_api.py::test_post_data PASSED\ntest_ui.py::test_component_rendering PASSED\ntest_ui.py::test_responsive_design PASSED\ntest_integration.py::test_full_workflow PASSED\n=============================== 5 passed in 3.45s ================================\n\nCoverage report:\n- Backend: 87%\n- Frontend: 92%\n- Overall: 89%",
+  "lint_results": "ESLint: No issues found\nPrettier: All files formatted\nTypeScript: No type errors\nPython flake8: 2 minor style issues (line length)\nBandit security: No security issues found",
+  "sast_results": "Security scan completed\n- No critical vulnerabilities found\n- 1 medium severity issue in lodash dependency\n- Recommendations: Update lodash to v4.17.21\n- No hardcoded secrets detected\n- Input validation present",
+  "screenshots_or_demo": [
+    "screenshots/dashboard-desktop.png",
+    "screenshots/dashboard-mobile.png",
+    "https://demo.example.com"
+  ],
+  "ci_config_present": true,
+  "license_text_present": true,
+  "accessibility_notes": "Passed WCAG 2.1 AA audit with 98% compliance. All interactive elements are keyboard accessible. Color contrast ratios meet requirements.",
+  "perf_notes": "Lighthouse Performance: 92, Accessibility: 98, Best Practices: 95, SEO: 89. Bundle size optimized with code splitting.",
+  "plagiarism_report": "Originality verified - no plagiarism detected. All code appears to be original work with proper attribution for third-party libraries."
+}
+
