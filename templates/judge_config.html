@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Judge Configuration - Hackathon Grader</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .preset-section {
+            margin-bottom: 40px;
+        }
+
+        .preset-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .preset-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .preset-btn {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .preset-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .preset-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .preset-btn h4 {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .preset-btn p {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .criteria-section {
+            margin-bottom: 40px;
+        }
+
+        .criteria-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .criteria-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .criteria-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            border: 2px solid #e9ecef;
+        }
+
+        .criteria-card h4 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .criteria-card p {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .weight-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .weight-control input {
+            width: 80px;
+            padding: 8px;
+            border: 2px solid #e9ecef;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1em;
+        }
+
+        .weight-control input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .weight-control span {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .summary-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .summary-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .weight-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .weight-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 5px;
+            border: 1px solid #e9ecef;
+        }
+
+        .total-weight {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Judge Configuration</h1>
+            <p>Configure custom weights for hackathon judging criteria</p>
+        </div>
+
+        <div class="content">
+            <div id="alerts"></div>
+
+            <div class="preset-section">
+                <h3>📋 Quick Presets</h3>
+                <p style="color: #666; margin-bottom: 20px;">Choose a preset configuration or create your own custom weights</p>
+                
+                <div class="preset-buttons">
+                    <div class="preset-btn" onclick="loadPreset('tech')">
+                        <h4>🔧 Tech Focus</h4>
+                        <p>Code: 25%, Architecture: 20%, Technical: 20%</p>
+                    </div>
+                    <div class="preset-btn" onclick="loadPreset('ui')">
+                        <h4>🎨 UI/UX Focus</h4>
+                        <p>UI/UX: 30%, Polish: 25%, Functionality: 20%</p>
+                    </div>
+                    <div class="preset-btn" onclick="loadPreset('innovation')">
+                        <h4>💡 Innovation Focus</h4>
+                        <p>Innovation: 30%, Functionality: 20%, Code: 15%</p>
+                    </div>
+                    <div class="preset-btn" onclick="loadPreset('balanced')">
+                        <h4>⚖️ Balanced</h4>
+                        <p>Equal distribution across all criteria</p>
+                    </div>
+                    <div class="preset-btn" onclick="loadPreset('all')">
+                        <h4>🌟 All Criteria</h4>
+                        <p>Comprehensive evaluation with all agents</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="criteria-section">
+                <h3>⚙️ Custom Weight Configuration</h3>
+                <p style="color: #666; margin-bottom: 20px;">Adjust the percentage weight for each judging criteria (must total 100%)</p>
+                
+                <div class="criteria-grid">
+                    <div class="criteria-card">
+                        <h4>🔍 Code Analysis</h4>
+                        <p>Code quality, patterns, and best practices</p>
+                        <div class="weight-control">
+                            <input type="number" id="code_analysis" min="0" max="100" value="20" onchange="updateTotal()">
+                            <span>%</span>
+                        </div>
+                    </div>
+
+                    <div class="criteria-card">
+                        <h4>🏗️ Architecture Analysis</h4>
+                        <p>System design and project structure</p>
+                        <div class="weight-control">
+                            <input type="number" id="architecture" min="0" max="100" value="15" onchange="updateTotal()">
+                            <span>%</span>
+                        </div>
+                    </div>
+
+                    <div class="criteria-card">
+                        <h4>🎨 UI/UX Analysis</h4>
+                        <p>User interface and user experience</p>
+                        <div class="weight-control">
+                            <input type="number" id="ui_ux" min="0" max="100" value="15" onchange="updateTotal()">
+                            <span>%</span>
+                        </div>
+                    </div>
+
+                    <div class="criteria-card">
+                        <h4>🔒 Security Analysis</h4>
+                        <p>Security best practices and vulnerabilities</p>
+                        <div class="weight-control">
+                            <input type="number" id="security" min="0" max="100" value="10" onchange="updateTotal()">
+                            <span>%</span>
+                        </div>
+                    </div>
+
+                    <div class="criteria-card">
+                        <h4>💡 Innovation & Creativity</h4>
+                        <p>Novelty and creative use of technology</p>
+                        <div class="weight-control">
+                            <input type="number" id="innovation" min="0" max="100" value="15" onchange="updateTotal()">
+                            <span>%</span>
+                        </div>
+                    </div>
+
+                    <div class="criteria-card">
+                        <h4>⚙️ Functionality & Completeness</h4>
+                        <p>Working features and completeness</p>
+                        <div class="weight-control">
+                            <input type="number" id="functionality" min="0" max="100" value="15" onchange="updateTotal()">
+                            <span>%</span>
+                        </div>
+                    </div>
+
+                    <div class="criteria-card">
+                        <h4>🔧 Technical Complexity</h4>
+                        <p>Technical difficulty and architecture</p>
+                        <div class="weight-control">
+                            <input type="number" id="technical" min="0" max="100" value="10" onchange="updateTotal()">
+                            <span>%</span>
+                        </div>
+                    </div>
+
+                    <div class="criteria-card">
+                        <h4>✨ UI/UX Polish</h4>
+                        <p>Visual design and user experience polish</p>
+                        <div class="weight-control">
+                            <input type="number" id="ui_ux_polish" min="0" max="100" value="0" onchange="updateTotal()">
+                            <span>%</span>
+                        </div>
+                    </div>
+
+                    <div class="criteria-card">
+                        <h4>🧠 Learning Agent</h4>
+                        <p>Learning from past analyses</p>
+                        <div class="weight-control">
+                            <input type="number" id="learning" min="0" max="100" value="0" onchange="updateTotal()">
+                            <span>%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="summary-section">
+                <h3>📊 Weight Summary</h3>
+                <div id="weightSummary" class="weight-summary">
+                    <!-- Dynamic content will be inserted here -->
+                </div>
+                <div id="totalWeight" class="total-weight weight-item">
+                    <span>Total Weight:</span>
+                    <span id="totalValue">100%</span>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="btn btn-secondary" onclick="resetToDefault()">Reset to Default</button>
+                <button class="btn btn-primary" onclick="saveConfiguration()">Save Configuration</button>
+                <button class="btn btn-success" onclick="applyConfiguration()">Apply & Test</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Preset configurations
+        const presets = {
+            tech: {
+                code_analysis: 25,
+                architecture: 20,
+                technical: 20,
+                functionality: 15,
+                innovation: 10,
+                security: 5,
+                ui_ux: 5,
+                ui_ux_polish: 0,
+                learning: 0
+            },
+            ui: {
+                ui_ux: 30,
+                ui_ux_polish: 25,
+                functionality: 20,
+                code_analysis: 10,
+                architecture: 10,
+                innovation: 5,
+                technical: 0,
+                security: 0,
+                learning: 0
+            },
+            innovation: {
+                innovation: 30,
+                functionality: 20,
+                code_analysis: 15,
+                architecture: 15,
+                technical: 10,
+                ui_ux: 5,
+                security: 5,
+                ui_ux_polish: 0,
+                learning: 0
+            },
+            balanced: {
+                code_analysis: 20,
+                architecture: 15,
+                ui_ux: 15,
+                security: 10,
+                innovation: 15,
+                functionality: 15,
+                technical: 10,
+                ui_ux_polish: 0,
+                learning: 0
+            },
+            all: {
+                code_analysis: 15,
+                architecture: 12,
+                ui_ux: 12,
+                security: 8,
+                innovation: 15,
+                functionality: 15,
+                technical: 12,
+                ui_ux_polish: 8,
+                learning: 3
+            }
+        };
+
+        function loadPreset(presetName) {
+            const preset = presets[presetName];
+            if (!preset) return;
+
+            // Update all input fields
+            Object.keys(preset).forEach(key => {
+                const input = document.getElementById(key);
+                if (input) {
+                    input.value = preset[key];
+                }
+            });
+
+            // Update active preset button
+            document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.closest('.preset-btn').classList.add('active');
+
+            updateTotal();
+            showAlert('Preset loaded successfully!', 'success');
+        }
+
+        function updateTotal() {
+            const inputs = document.querySelectorAll('input[type="number"]');
+            let total = 0;
+            const summary = [];
+
+            inputs.forEach(input => {
+                const value = parseInt(input.value) || 0;
+                total += value;
+                
+                if (value > 0) {
+                    const label = input.id.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    summary.push({ label, value });
+                }
+            });
+
+            // Update total display
+            document.getElementById('totalValue').textContent = total + '%';
+            
+            // Update summary
+            const summaryContainer = document.getElementById('weightSummary');
+            summaryContainer.innerHTML = summary.map(item => 
+                `<div class="weight-item">
+                    <span>${item.label}</span>
+                    <span>${item.value}%</span>
+                </div>`
+            ).join('');
+
+            // Update total weight styling
+            const totalWeight = document.getElementById('totalWeight');
+            if (total === 100) {
+                totalWeight.style.background = '#28a745';
+                totalWeight.style.color = 'white';
+            } else if (total > 100) {
+                totalWeight.style.background = '#dc3545';
+                totalWeight.style.color = 'white';
+            } else {
+                totalWeight.style.background = '#ffc107';
+                totalWeight.style.color = '#212529';
+            }
+        }
+
+        function resetToDefault() {
+            const defaultWeights = presets.balanced;
+            Object.keys(defaultWeights).forEach(key => {
+                const input = document.getElementById(key);
+                if (input) {
+                    input.value = defaultWeights[key];
+                }
+            });
+            updateTotal();
+            showAlert('Reset to default configuration', 'success');
+        }
+
+        function saveConfiguration() {
+            const inputs = document.querySelectorAll('input[type="number"]');
+            const weights = {};
+            
+            inputs.forEach(input => {
+                weights[input.id] = parseInt(input.value) || 0;
+            });
+
+            const total = Object.values(weights).reduce((sum, val) => sum + val, 0);
+            
+            if (total !== 100) {
+                showAlert(`Total weight must be 100%, currently ${total}%`, 'danger');
+                return;
+            }
+
+            // Save to localStorage
+            localStorage.setItem('judgeWeights', JSON.stringify(weights));
+            showAlert('Configuration saved successfully!', 'success');
+        }
+
+        function applyConfiguration() {
+            const inputs = document.querySelectorAll('input[type="number"]');
+            const weights = {};
+            
+            inputs.forEach(input => {
+                weights[input.id] = parseInt(input.value) || 0;
+            });
+
+            const total = Object.values(weights).reduce((sum, val) => sum + val, 0);
+            
+            if (total !== 100) {
+                showAlert(`Total weight must be 100%, currently ${total}%`, 'danger');
+                return;
+            }
+
+            // Send to server
+            fetch('/api/judge-config', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ weights })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showAlert('Configuration applied successfully!', 'success');
+                } else {
+                    showAlert('Error applying configuration: ' + data.error, 'danger');
+                }
+            })
+            .catch(error => {
+                showAlert('Error applying configuration: ' + error.message, 'danger');
+            });
+        }
+
+        function showAlert(message, type) {
+            const alertsContainer = document.getElementById('alerts');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            alertsContainer.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateTotal();
+            
+            // Load saved configuration if available
+            const saved = localStorage.getItem('judgeWeights');
+            if (saved) {
+                try {
+                    const weights = JSON.parse(saved);
+                    Object.keys(weights).forEach(key => {
+                        const input = document.getElementById(key);
+                        if (input) {
+                            input.value = weights[key];
+                        }
+                    });
+                    updateTotal();
+                } catch (e) {
+                    console.log('No saved configuration found');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

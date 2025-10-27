@@ -35,13 +35,35 @@ ENV/
 .DS_Store
 Thumbs.db
 
-# Logs
+# Project specific
+screenshots/
+logs/
+test_web_app/
+simple_web_app/
 *.log
 
-# Environment variables
+# Development files
+pyrightconfig.json
+.vscode/
+.idea/
+
+# Temporary files
+temp/
+tmp/
+ui_renderer_*/
+react_test_*/
+
+# Cache and generated files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+build/
+dist/
+*.egg-info/
+
+# Environment files
 .env
 .env.local
-
-# Railway specific
-.railway/
-
+.env.production

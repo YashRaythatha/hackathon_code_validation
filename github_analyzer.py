@@ -50,6 +50,19 @@ class GitHubAnalyzer:
         try:
             url = f"{repo_info['api_url']}/git/trees/{repo_info['branch']}?recursive=1"
             response = self.session.get(url)
+            
+            # Handle rate limiting
+            if response.status_code == 403:
+                rate_limit_info = response.headers.get('X-RateLimit-Remaining', '0')
+                if rate_limit_info == '0':
+                    print(f"Warning: GitHub API rate limit exceeded. Please add a GitHub token to increase limits.")
+                    print(f"   Current limit: 60 requests/hour (unauthenticated)")
+                    print(f"   With token: 5000 requests/hour")
+                    print(f"   Set GITHUB_TOKEN environment variable")
+                else:
+                    print(f"Warning: GitHub API access denied. Status: {response.status_code}")
+                return []
+            
             response.raise_for_status()
             return response.json().get('tree', [])
         except Exception as e:
@@ -61,6 +74,19 @@ class GitHubAnalyzer:
         try:
             url = f"{repo_info['api_url']}/readme"
             response = self.session.get(url)
+            
+            # Handle rate limiting
+            if response.status_code == 403:
+                rate_limit_info = response.headers.get('X-RateLimit-Remaining', '0')
+                if rate_limit_info == '0':
+                    print(f"Warning: GitHub API rate limit exceeded. Please add a GitHub token to increase limits.")
+                    print(f"   Current limit: 60 requests/hour (unauthenticated)")
+                    print(f"   With token: 5000 requests/hour")
+                    print(f"   Set GITHUB_TOKEN environment variable")
+                else:
+                    print(f"Warning: GitHub API access denied. Status: {response.status_code}")
+                return ""
+            
             response.raise_for_status()
             content = response.json().get('content', '')
             return base64.b64decode(content).decode('utf-8')

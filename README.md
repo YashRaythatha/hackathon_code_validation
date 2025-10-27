@@ -41,8 +41,6 @@ python ai_grader.py --repo https://github.com/username/repo --token ghp_xxxxx
 ### **Supporting Files:**
 - **`templates/index.html`** - Web UI template
 - **`requirements.txt`** - Dependencies
-- **`sample_artifacts.json`** - Example artifacts
-- **`learning_stats.py`** - ML statistics viewer
 - **`README.md`** - Complete documentation
 
 ## 🤖 AI Agents
@@ -263,10 +261,10 @@ Access the learning dashboard at: `http://localhost:5000` (after starting web ap
 ### **View Learning Statistics**
 ```bash
 # View current learning statistics
-python learning_stats.py
+python -c "from ai_agents import AgentOrchestrator; print(AgentOrchestrator().agents['learning'].get_learning_stats())"
 
 # Reset learning data (for testing)
-python learning_stats.py --reset
+python -c "from ai_agents import AgentOrchestrator; AgentOrchestrator().agents['learning'].reset_learning()"
 ```
 
 ## 🎯 Summary
