@@ -383,33 +383,6 @@
             margin-bottom: 15px;
         }
         
-        .ai-confidence {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        
-        .confidence-bar {
-            flex: 1;
-            height: 6px;
-            background: #e1e5e9;
-            border-radius: 3px;
-            overflow: hidden;
-        }
-        
-        .confidence-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #007BFF 0%, #0056b3 100%);
-            border-radius: 3px;
-            transition: width 0.3s ease;
-        }
-        
-        .confidence-text {
-            font-size: 0.9em;
-            color: #666;
-            min-width: 60px;
-        }
         
         @media (max-width: 1200px) {
             .agent-grid {
@@ -486,26 +459,28 @@
             display: flex;
             flex-direction: column;
             align-items: flex-end;
+            gap: 5px;
         }
         
-        .confidence-indicator .confidence-bar {
-            width: 120px;
-            height: 8px;
+        .confidence-bar {
+            width: 100px;
+            height: 6px;
             background: #e9ecef;
-            border-radius: 4px;
+            border-radius: 3px;
             overflow: hidden;
-            margin-bottom: 5px;
         }
         
-        .confidence-indicator .confidence-fill {
+        .confidence-fill {
             height: 100%;
             background: linear-gradient(90deg, #dc3545 0%, #ffc107 50%, #28a745 100%);
+            border-radius: 3px;
             transition: width 0.3s ease;
         }
         
-        .confidence-indicator span {
-            font-size: 0.85em;
+        .confidence-text {
+            font-size: 0.8em;
             color: #666;
+            font-weight: 500;
         }
         
         .analysis-content {
@@ -530,25 +505,43 @@
         
         .insights-list, .evidence-list, .recommendations-list, .risks-list {
             margin: 0;
-            padding-left: 20px;
+            padding-left: 0;
+            list-style: none;
         }
         
         .insights-list li, .evidence-list li, .recommendations-list li, .risks-list li {
-            margin-bottom: 4px;
-            line-height: 1.3;
+            margin-bottom: 6px;
+            line-height: 1.4;
             color: #555;
+            background: white;
+            border-radius: 6px;
+            padding: 8px 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: transform 0.1s ease;
         }
-        
+
         .insights-list li {
             color: #2c5aa0;
+            border-left: 3px solid #007BFF;
         }
         
         .recommendations-list li {
             color: #28a745;
+            border-left: 3px solid #28a745;
         }
         
         .risks-list li {
             color: #dc3545;
+            border-left: 3px solid #dc3545;
+        }
+
+        .evidence-list li {
+            color: #555;
+            border-left: 3px solid #007BFF;
+        }
+
+        .insights-list li:hover, .evidence-list li:hover, .recommendations-list li:hover, .risks-list li:hover {
+            transform: translateX(2px);
         }
         
         .overall-summary {
@@ -593,7 +586,7 @@
         /* Human-friendly insight styles */
         .insights-content {
             display: grid;
-            gap: 10px;
+            gap: 8px;
         }
 
         .insight-section {
@@ -601,29 +594,94 @@
             border-radius: 8px;
             padding: 12px;
             border-left: 4px solid #007BFF;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
         .insight-section h5 {
-            margin: 0 0 6px 0;
-            color: #333;
-            font-size: 1.1em;
+            margin: 0 0 8px 0;
+            color: #007BFF;
+            font-size: 14px;
             font-weight: 600;
         }
 
         .insight-content {
             color: #555;
-            line-height: 1.3;
+            line-height: 1.4;
             white-space: pre-line;
+            margin: 0;
         }
 
         .insight-item {
             background: #f8f9fa;
             border-radius: 6px;
-            padding: 8px;
-            margin-bottom: 4px;
+            padding: 6px 8px;
+            margin-bottom: 2px;
             color: #555;
-            line-height: 1.3;
+            line-height: 1.2;
+            font-size: 14px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
         }
+
+        /* Visual score indicators */
+        .score-indicator {
+            display: inline-block;
+            background: linear-gradient(90deg, #28a745 0%, #ffc107 50%, #dc3545 100%);
+            height: 4px;
+            border-radius: 2px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        .score-indicator::before {
+            content: '';
+            display: block;
+            height: 100%;
+            background: white;
+            border-radius: 2px;
+            box-shadow: 0 0 2px rgba(0,0,0,0.2);
+        }
+
+        /* Enhanced card styling */
+        .analysis-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-left: 4px solid #007BFF;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .analysis-section:hover {
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+        }
+
+        /* Section separators */
+        .analysis-section-content {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .analysis-section-content:last-child {
+            margin-bottom: 0;
+        }
+
+        /* AI Confidence styling */
+
+        /* Improved typography */
+        .analysis-section-content h4 {
+            margin: 0 0 12px 0;
+            color: #333;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+
         
         
     </style>
@@ -859,7 +917,7 @@
                                     <div class="confidence-bar">
                                         <div class="confidence-fill" style="width: ${confidence}%"></div>
                                     </div>
-                                    <span>AI Confidence: ${confidence}%</span>
+                                    <div class="confidence-text">AI Confidence: ${confidence}%</div>
                                 </div>
                             </div>
                             
@@ -869,30 +927,66 @@
                                         <h4>🔍 Analysis Details</h4>
                                         <div class="insights-content">
                                             ${insights.map(insight => {
-                                                // Parse human-friendly format
-                                                if (insight.includes('🎯 Why this score is high:')) {
-                                                    return `<div class="insight-section">
-                                                        <h5>🎯 Why this score is high:</h5>
-                                                        <div class="insight-content">${insight.split('🎯 Why this score is high:')[1].split('⚠️ Why some points were deducted:')[0].trim()}</div>
-                                                    </div>`;
-                                                } else if (insight.includes('⚠️ Why some points were deducted:')) {
-                                                    return `<div class="insight-section">
-                                                        <h5>⚠️ Why some points were deducted:</h5>
-                                                        <div class="insight-content">${insight.split('⚠️ Why some points were deducted:')[1].split('📊 Key Reasons for the Score:')[0].trim()}</div>
-                                                    </div>`;
-                                                } else if (insight.includes('📊 Key Reasons for the Score:')) {
-                                                    return `<div class="insight-section">
-                                                        <h5>📊 Key Reasons for the Score:</h5>
-                                                        <div class="insight-content">${insight.split('📊 Key Reasons for the Score:')[1].split('💡 In Simple Terms:')[0].trim()}</div>
-                                                    </div>`;
-                                                } else if (insight.includes('💡 In Simple Terms:')) {
-                                                    return `<div class="insight-section">
-                                                        <h5>💡 In Simple Terms:</h5>
-                                                        <div class="insight-content">${insight.split('💡 In Simple Terms:')[1].trim()}</div>
-                                                    </div>`;
+                                                // Check if this is a detailed scoring explanation (contains multiple sections)
+                                                if (insight.includes('🎯 Why this score is high:') || 
+                                                    insight.includes('⚠️ Why some points were deducted:') || 
+                                                    insight.includes('📊 Key Reasons for the Score:') || 
+                                                    insight.includes('💡 In Simple Terms:')) {
+                                                    
+                                                    // Parse the complete detailed explanation
+                                                    let sections = [];
+                                                    
+                                                    // Extract Why this score is high
+                                                    if (insight.includes('🎯 Why this score is high:')) {
+                                                        const highSection = insight.split('🎯 Why this score is high:')[1];
+                                                        const highContent = highSection.split('⚠️ Why some points were deducted:')[0].split('📊 Key Reasons for the Score:')[0].split('💡 In Simple Terms:')[0].trim();
+                                                        if (highContent) {
+                                                            sections.push(`<div class="insight-section">
+                                                                <h5>🎯 Why this score is high:</h5>
+                                                                <div class="insight-content">${highContent}</div>
+                                                            </div>`);
+                                                        }
+                                                    }
+                                                    
+                                                    // Extract Why some points were deducted
+                                                    if (insight.includes('⚠️ Why some points were deducted:')) {
+                                                        const deductSection = insight.split('⚠️ Why some points were deducted:')[1];
+                                                        const deductContent = deductSection.split('📊 Key Reasons for the Score:')[0].split('💡 In Simple Terms:')[0].trim();
+                                                        if (deductContent) {
+                                                            sections.push(`<div class="insight-section">
+                                                                <h5>⚠️ Why some points were deducted:</h5>
+                                                                <div class="insight-content">${deductContent}</div>
+                                                            </div>`);
+                                                        }
+                                                    }
+                                                    
+                                                    // Extract Key Reasons for the Score
+                                                    if (insight.includes('📊 Key Reasons for the Score:')) {
+                                                        const reasonsSection = insight.split('📊 Key Reasons for the Score:')[1];
+                                                        const reasonsContent = reasonsSection.split('💡 In Simple Terms:')[0].trim();
+                                                        if (reasonsContent) {
+                                                            sections.push(`<div class="insight-section">
+                                                                <h5>📊 Key Reasons for the Score:</h5>
+                                                                <div class="insight-content">${reasonsContent}</div>
+                                                            </div>`);
+                                                        }
+                                                    }
+                                                    
+                                                    // Extract In Simple Terms
+                                                    if (insight.includes('💡 In Simple Terms:')) {
+                                                        const simpleSection = insight.split('💡 In Simple Terms:')[1].trim();
+                                                        if (simpleSection) {
+                                                            sections.push(`<div class="insight-section">
+                                                                <h5>💡 In Simple Terms:</h5>
+                                                                <div class="insight-content">${simpleSection}</div>
+                                                            </div>`);
+                                                        }
+                                                    }
+                                                    
+                                                    return sections.join('');
                                                 } else {
-                                                    // Fallback for simple insights
-                                                    return `<div class="insight-item">${insight}</div>`;
+                                                    // Fallback for simple insights - present as bullet points
+                                                    return `<div class="insight-item">• ${insight}</div>`;
                                                 }
                                             }).join('')}
                                         </div>

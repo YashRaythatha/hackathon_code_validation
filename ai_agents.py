@@ -28,6 +28,7 @@ except ImportError:
     UI_RENDERING_AVAILABLE = False
     print("Warning: UI rendering capabilities not available. Install selenium, opencv-python, and pillow.")
 
+
 # Some constants we'll use throughout
 DEFAULT_CONFIDENCE = 0.5
 MAX_PATTERNS = 1000
@@ -1588,6 +1589,16 @@ class SecurityAgent(BaseAIAgent):
         evidence.extend(auth_analysis['evidence'])
         recommendations.extend(auth_analysis['recommendations'])
         
+        # Add basic insights
+        if secrets_analysis['score'] > 0:
+            insights.append("Secrets management and environment configuration detected")
+        if deps_analysis['score'] > 0:
+            insights.append("Dependency security measures implemented")
+        if validation_analysis['score'] > 0:
+            insights.append("Input validation and security controls found")
+        if auth_analysis['score'] > 0:
+            insights.append("Authentication and authorization systems detected")
+        
         # Calculate confidence
         confidence = self.get_confidence_score(len(evidence), len(insights))
         
@@ -2489,7 +2500,28 @@ If project_summary and features_list are both present, +0.1 (cap at 1.0).
         scoring_explanation = self._generate_innovation_scoring_explanation(result_normalized, inputs_dict)
         
         # Convert to AgentAnalysis format
-        insights = [result.get('headline_verdict', ''), result.get('calculation_notes', '')]
+        insights = []
+        
+        # Add basic insights
+        if result.get('headline_verdict'):
+            insights.append(result.get('headline_verdict', ''))
+        if result.get('calculation_notes'):
+            insights.append(result.get('calculation_notes', ''))
+        
+        # Add insights based on metric scores
+        metric_scores = result.get('metric_scores', {})
+        if metric_scores.get('originality', 0) >= 7:
+            insights.append("High originality and novel approach detected")
+        if metric_scores.get('creative_tech_use', 0) >= 7:
+            insights.append("Creative and innovative technology usage found")
+        if metric_scores.get('problem_fit_creativity', 0) >= 7:
+            insights.append("Excellent problem-solution fit with creative approach")
+        if metric_scores.get('aha_factor', 0) >= 7:
+            insights.append("Surprising and delightful features identified")
+        if metric_scores.get('future_potential', 0) >= 7:
+            insights.append("Strong future potential and scalability")
+        
+        # Add detailed scoring explanation
         insights.append(scoring_explanation)
         
         return AgentAnalysis(
@@ -2966,7 +2998,26 @@ Cap at 1.0.
             status = "✓" if flow.get('implemented', False) else "✗"
             evidence.append(f"{status} {flow.get('flow', 'Unknown')}: {flow.get('notes', '')}")
         
-        insights = [result.get('working_claim', '')]
+        # Convert to insights format
+        insights = []
+        
+        # Add basic insights
+        if result.get('working_claim'):
+            insights.append(result.get('working_claim', ''))
+        
+        # Add insights based on flow coverage
+        implemented_flows = sum(1 for flow in flow_table if flow.get('implemented', False))
+        total_flows = len(flow_table)
+        if implemented_flows > 0:
+            insights.append(f"Core functionality implemented: {implemented_flows}/{total_flows} flows working")
+        if len(result.get('quality_signals', [])) > 0:
+            insights.append("Quality signals and reliability indicators found")
+        if inputs_dict.get('demo_reference'):
+            insights.append("Working demo or screenshots provided")
+        if inputs_dict.get('test_summary'):
+            insights.append("Test coverage and validation implemented")
+        
+        # Add detailed scoring explanation
         insights.append(scoring_explanation)
         
         return AgentAnalysis(
@@ -3340,7 +3391,33 @@ tech_stack_detected + performance_scalability_signals + security_privacy_signals
         evidence.append(f"Architecture: {result.get('architecture_style', 'Unknown')}")
         evidence.append(f"Integration surface: {result.get('integration_surface_area', 0)}/10")
         
-        insights = [result.get('tradeoff_rationale', '')]
+        # Convert to insights format
+        insights = []
+        
+        # Add basic insights
+        if result.get('tradeoff_rationale'):
+            insights.append(result.get('tradeoff_rationale', ''))
+        
+        # Add insights based on complexity
+        architecture_style = result.get('architecture_style', 'Unknown')
+        if architecture_style in ['Microservices', 'Event-driven', 'Distributed']:
+            insights.append(f"Advanced architecture pattern: {architecture_style}")
+        elif architecture_style in ['client-server', 'data-pipeline']:
+            insights.append(f"Solid architecture pattern: {architecture_style}")
+        
+        integration_score = result.get('integration_surface_area', 0)
+        if integration_score >= 7:
+            insights.append("High integration complexity with multiple services")
+        elif integration_score >= 5:
+            insights.append("Moderate integration complexity")
+        
+        complexity_drivers = result.get('complexity_drivers', [])
+        if len(complexity_drivers) >= 4:
+            insights.append("Multiple technical complexity factors identified")
+        elif len(complexity_drivers) >= 2:
+            insights.append("Several technical complexity factors present")
+        
+        # Add detailed scoring explanation
         insights.append(scoring_explanation)
         
         return AgentAnalysis(
